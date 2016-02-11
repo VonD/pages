@@ -2,9 +2,10 @@
   "name": "pages",
   "version": "1.0.0",
   "description": "no fuss pagination helper",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "babel --presets es2015,stage-0 -d lib/ src/",
+    "prepublish": "npm run compile"
   },
   "keywords": [
     "pagination",
@@ -12,5 +13,11 @@
     "pages"
   ],
   "author": "Paul Vonderscher",
-  "license": "ISC"
+  "repository": "https://github.com/VonD/pages",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.5.1",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0"
+  }
 }

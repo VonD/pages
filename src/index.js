@@ -1,4 +1,4 @@
-export default function computePages({
+module.exports = function computePages({
 	totalSize = 3,
 	currentIndex = 1,
 	bufferSize = 1
