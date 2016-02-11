@@ -1,6 +1,6 @@
 {
   "name": "compact-pagination",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "no fuss pagination helper",
   "main": "lib/index.js",
   "scripts": {

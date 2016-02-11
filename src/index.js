@@ -19,12 +19,12 @@ module.exports = function compactPagination({
 		pages = [{page: 1}].concat(pages);
 	}
 	let lastPage = pages[pages.length - 1].page;
-	if (lastPage > totalSize - 2) {
-		pages = pages.concat([{isSeparator: true}, {page: totalSize}]);
+	if (lastPage === totalSize - 1) {
+		pages = pages.concat([{ page: totalSize }]);
 	} else if (lastPage === totalSize - 2) {
-		pages = pages.concat([{page: totalSize - 1}, {page: totalSize}]);
-	} else if (lastPage === totalSize - 1) {
-		pages = pages.concat([{page: totalSize}]);
+		pages = pages.concat([{ page: totalSize - 1 }, { page: totalSize }]);
+	} else if (lastPage !== totalSize) {
+		pages = pages.concat([{ isSeparator: true }, { page: totalSize }]);
 	}
 	return pages;
 }
