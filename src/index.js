@@ -1,4 +1,4 @@
-module.exports = function computePages({
+module.exports = function compactPagination({
 	totalSize = 3,
 	currentIndex = 1,
 	bufferSize = 1
