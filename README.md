@@ -3,9 +3,9 @@
 No fuss, opinionated pagination helper.
 
 ```es6
-import computePages from 'pages'
+import compactPagination from 'compact-pagination'
 
-computePages({
+compactPagination({
 	totalSize: 10,
 	currentIndex: 5,
 	bufferSize: 1
