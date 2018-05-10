@@ -4,27 +4,40 @@ module.exports = function compactPagination({
 	bufferSize = 1
 }) {
 	if (currentIndex < 1 || currentIndex > totalSize) throw('Invalid config');
-	let pages = [{page: currentIndex, isCurrent: true}];
-	for (let page = currentIndex - 1; page >= Math.max(1, currentIndex - bufferSize); page--) {
-		pages.unshift({ page });
+	const size = Math.min(totalSize, 5 + (bufferSize * 2));
+	const pageNumbers = new Set([1, totalSize]);
+	let lowestBound = Math.max(1, currentIndex - bufferSize);
+	let highestBound = Math.min(totalSize, currentIndex + bufferSize);
+	for (let i = lowestBound; i <= highestBound; i++) {
+		pageNumbers.add(i);
 	}
-	for (let page = currentIndex + 1; page <= Math.min(totalSize, currentIndex + bufferSize); page++) {
-		pages.push({ page });
+	const edges = {};
+	if (lowestBound > 2) edges.left = true;
+	if (highestBound < totalSize - 1) edges.right = true;
+	if (Object.keys(edges).length === 1) {
+		for (
+			let i = edges.left ? lowestBound : highestBound;
+			pageNumbers.size < size - 1;
+			edges.left ? i-- : i++
+		) {
+			pageNumbers.add(i);
+			if (edges.left) {
+				lowestBound = i;
+			} else {
+				highestBound = i;
+			}
+		}
 	}
-	if (pages[0].page > 3) {
-		pages = [{page: 1}, {isSeparator: true}].concat(pages);
-	} else if (pages[0].page === 3) {
-		pages = [{page: 1}, {page: 2}].concat(pages);
-	} else if (pages[0].page === 2) {
-		pages = [{page: 1}].concat(pages);
+	const pages = Array.from(pageNumbers).sort( (x, y) => x - y).map(
+		i => ({page: i, isCurrent: i === currentIndex})
+	);
+	if (edges.left) {
+		const left = lowestBound === 3 ? {page: 2} : {isSeparator: true};
+		pages.splice(1, 0, left);
 	}
-	let lastPage = pages[pages.length - 1].page;
-	if (lastPage === totalSize - 1) {
-		pages = pages.concat([{ page: totalSize }]);
-	} else if (lastPage === totalSize - 2) {
-		pages = pages.concat([{ page: totalSize - 1 }, { page: totalSize }]);
-	} else if (lastPage !== totalSize) {
-		pages = pages.concat([{ isSeparator: true }, { page: totalSize }]);
+	if (edges.right) {
+		const right = highestBound === totalSize - 2 ? {page: highestBound + 1} : {isSeparator: true};
+		pages.splice(pages.length - 1, 0, right);
 	}
 	return pages;
 }
